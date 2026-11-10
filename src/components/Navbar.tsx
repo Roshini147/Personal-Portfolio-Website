@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Download, Code2 } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { Menu, X, Download } from 'lucide-react';
 
 interface NavbarProps {
   onOpenResumeModal: () => void;
 }
 
 const navLinks = [
-  { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#skills' },
   { name: 'Education', href: '#education' },
@@ -20,15 +18,14 @@ const navLinks = [
 export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('about');
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
 
-      // Section spy
       const sections = navLinks.map((item) => item.href.substring(1));
-      const scrollPosition = window.scrollY + 200;
+      const scrollPosition = window.scrollY + 180;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const element = document.getElementById(sections[i]);
@@ -57,30 +54,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-canvas-950/85 backdrop-blur-md border-b border-slate-800/80 py-3 shadow-lg shadow-black/40'
+          ? 'bg-[#08090d]/90 backdrop-blur-md border-b border-white/10 py-3 shadow-sm'
           : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo / Monogram */}
+          {/* Logo */}
           <a
             href="#home"
             onClick={(e) => handleLinkClick(e, '#home')}
-            className="group flex items-center gap-2.5 text-slate-100 font-bold tracking-tight text-lg"
+            className="text-white font-semibold text-lg tracking-tight hover:text-blue-400 transition"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-electric-600 to-cyanGlow-500 p-[1px] shadow-glow-sm group-hover:shadow-glow-md transition-all duration-300">
-              <div className="w-full h-full bg-canvas-950 rounded-lg flex items-center justify-center">
-                <Code2 className="w-4 h-4 text-cyanGlow-400 group-hover:scale-110 transition-transform" />
-              </div>
-            </div>
-            <span className="font-display tracking-wider">
-              ROSHINI<span className="text-electric-500 font-mono">.A</span>
-            </span>
+            ROSHINI A
           </a>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1 sm:gap-2">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.substring(1);
               return (
@@ -88,55 +78,51 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 relative ${
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'text-white bg-slate-800/80'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                      ? 'text-white bg-white/10'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
                   }`}
                 >
                   {link.name}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-electric-500 to-cyanGlow-400 rounded-full" />
-                  )}
                 </a>
               );
             })}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* Action Buttons */}
           <div className="hidden sm:flex items-center gap-3">
             <button
               type="button"
               onClick={onOpenResumeModal}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide uppercase bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700 hover:border-electric-500/50 shadow-sm transition-all duration-200"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 transition"
             >
-              <Download className="w-3.5 h-3.5 text-cyanGlow-400" />
+              <Download className="w-3.5 h-3.5 text-blue-400" />
               <span>Resume</span>
             </button>
             <a
               href="#contact"
               onClick={(e) => handleLinkClick(e, '#contact')}
-              className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-semibold tracking-wide uppercase bg-gradient-to-r from-electric-600 to-cyanGlow-600 hover:from-electric-500 hover:to-cyanGlow-500 text-white shadow-glow-sm hover:shadow-glow-md transition-all duration-200"
+              className="inline-flex items-center px-4 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white transition shadow-sm"
             >
-              Let's Connect
+              Contact
             </a>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 md:hidden">
             <button
               type="button"
               onClick={onOpenResumeModal}
-              className="sm:hidden p-2 rounded-lg bg-slate-800 text-slate-200 hover:text-white"
-              title="Resume"
-              aria-label="View Resume"
+              className="sm:hidden p-2 rounded-lg bg-white/5 text-slate-200"
+              aria-label="Resume"
             >
-              <Download className="w-4 h-4 text-cyanGlow-400" />
+              <Download className="w-4 h-4 text-blue-400" />
             </button>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white border border-slate-700/60"
+              className="p-2 rounded-lg bg-white/5 text-slate-300 hover:text-white"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -147,7 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-canvas-900/95 backdrop-blur-xl border-b border-slate-800 px-4 pt-3 pb-6 space-y-2 mt-2 shadow-2xl">
+        <div className="md:hidden bg-[#0d1017]/95 backdrop-blur-xl border-b border-white/10 px-5 pt-3 pb-6 space-y-2 shadow-xl">
           {navLinks.map((link) => {
             const isActive = activeSection === link.href.substring(1);
             return (
@@ -155,34 +141,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className={`block px-3 py-2 rounded-lg text-base font-medium transition ${
-                  isActive
-                    ? 'text-cyanGlow-400 bg-slate-800'
-                    : 'text-slate-300 hover:bg-slate-800/50'
+                className={`block px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  isActive ? 'text-blue-400 bg-white/5' : 'text-slate-300'
                 }`}
               >
                 {link.name}
               </a>
             );
           })}
-          <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
+          <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
             <button
               type="button"
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenResumeModal();
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800 text-sm font-medium text-slate-200 border border-slate-700"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 text-sm font-medium text-slate-200 border border-white/10"
             >
-              <Download className="w-4 h-4 text-cyanGlow-400" />
-              <span>Inspect & Download Resume</span>
+              <Download className="w-4 h-4 text-blue-400" />
+              <span>View Resume</span>
             </button>
             <a
               href="#contact"
               onClick={(e) => handleLinkClick(e, '#contact')}
-              className="w-full text-center px-4 py-2.5 rounded-lg bg-gradient-to-r from-electric-600 to-cyanGlow-600 text-sm font-medium text-white shadow-glow-sm"
+              className="w-full text-center px-4 py-2.5 rounded-lg bg-blue-600 text-sm font-medium text-white"
             >
-              Let's Connect
+              Contact
             </a>
           </div>
         </div>

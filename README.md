@@ -91,3 +91,4 @@ public/
 ```
 
 All data configurations are centralized and editable in [`src/data/portfolioData.ts`](src/data/portfolioData.ts).
+

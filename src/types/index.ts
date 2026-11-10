@@ -85,3 +85,4 @@ export interface ProjectItem {
   featured: boolean;
   architectureDetails?: string[];
 }
+

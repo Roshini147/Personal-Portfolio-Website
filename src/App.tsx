@@ -10,7 +10,8 @@ import { Projects } from './components/Projects';
 import { CodingProfiles } from './components/CodingProfiles';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { DocumentModalViewer, DocumentViewerProps } from './components/ui/DocumentModalViewer';
+import { Global3DBackground } from './components/3d/Global3DBackground';
+import { DocumentModalViewer } from './components/ui/DocumentModalViewer';
 import { DocumentInfo, CertificateItem } from './types';
 import { personalInfo } from './data/portfolioData';
 
@@ -19,7 +20,7 @@ export const App: React.FC = () => {
     isOpen: boolean;
     title: string;
     subtitle?: string;
-    documentType: 'Offer Letter' | 'Completion Certificate' | 'Course Certification' | 'Resume';
+    documentType: string;
     filePath: string;
     issueDate?: string;
     issuer?: string;
@@ -27,41 +28,35 @@ export const App: React.FC = () => {
     credentialId?: string;
     verificationUrl?: string;
     notes?: string;
-    discrepancyAlert?: string;
   }>({
     isOpen: false,
     title: '',
-    documentType: 'Completion Certificate',
+    documentType: 'Document',
     filePath: '',
   });
 
   const handleOpenResumeModal = () => {
     setModalState({
       isOpen: true,
-      title: `${personalInfo.name} — Official Resume`,
+      title: `${personalInfo.name} — Resume`,
       subtitle: 'Computer Science Engineering | Full-Stack Developer',
       documentType: 'Resume',
       filePath: personalInfo.resumeFile,
-      issuer: 'Roshini A (Official Resume Document)',
-      issueDate: 'Academic Year 2024–2028',
-      notes: 'Official verified resume document. Click Download to save original copy.',
+      issuer: 'Roshini A',
+      issueDate: '2024–2028',
     });
   };
 
   const handleViewInternshipDocument = (
     doc: DocumentInfo,
     company: string,
-    role: string,
-    discrepancy?: string
+    role: string
   ) => {
-    const docLabel =
-      doc.type === 'offer_letter' ? 'Offer Letter' : 'Completion Certificate';
-
     setModalState({
       isOpen: true,
-      title: `${company} — ${docLabel}`,
+      title: `${company} — Completion Certificate`,
       subtitle: role,
-      documentType: doc.type === 'offer_letter' ? 'Offer Letter' : 'Completion Certificate',
+      documentType: 'Completion Certificate',
       filePath: doc.filePath,
       issueDate: doc.date,
       issuer: doc.issuer || company,
@@ -69,7 +64,6 @@ export const App: React.FC = () => {
       credentialId: doc.idOrRef,
       verificationUrl: doc.credentialUrl,
       notes: doc.notes,
-      discrepancyAlert: discrepancy,
     });
   };
 
@@ -78,7 +72,7 @@ export const App: React.FC = () => {
       isOpen: true,
       title: cert.title,
       subtitle: cert.issuer,
-      documentType: 'Course Certification',
+      documentType: 'Certificate',
       filePath: cert.imagePath,
       issueDate: cert.issueDate,
       issuer: cert.partner ? `${cert.issuer} (${cert.partner})` : cert.issuer,
@@ -93,12 +87,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-canvas-950 text-slate-100 flex flex-col selection:bg-electric-600/40 selection:text-white">
-      {/* Navigation Bar */}
+    <div className="relative min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-blue-600/30 selection:text-white overflow-x-hidden font-sans">
+      {/* 3D Animated Background across entire website */}
+      <Global3DBackground />
+
+      {/* Navigation */}
       <Navbar onOpenResumeModal={handleOpenResumeModal} />
 
-      {/* Main Content Sections */}
-      <main className="flex-grow">
+      {/* Main Sections */}
+      <main className="relative z-10 flex-grow">
         <Hero onOpenResumeModal={handleOpenResumeModal} />
         <About onOpenResumeModal={handleOpenResumeModal} />
         <Skills />
@@ -113,7 +110,7 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer onOpenResumeModal={handleOpenResumeModal} />
 
-      {/* Global Document Viewer Modal */}
+      {/* Interactive Document Viewer Modal */}
       <DocumentModalViewer
         isOpen={modalState.isOpen}
         onClose={handleCloseModal}
@@ -127,7 +124,6 @@ export const App: React.FC = () => {
         credentialId={modalState.credentialId}
         verificationUrl={modalState.verificationUrl}
         notes={modalState.notes}
-        discrepancyAlert={modalState.discrepancyAlert}
       />
     </div>
   );
