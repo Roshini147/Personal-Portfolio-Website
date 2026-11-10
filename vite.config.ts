@@ -10,6 +10,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    port: 3000,
+    open: false,
+    host: true,
+    watch: {
+      ignored: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/.git/**'],
+    },
+  },
   build: {
     rollupOptions: {
       output: {
@@ -22,10 +30,5 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 800,
-  },
-  server: {
-    port: 3000,
-    open: false,
-    host: true,
   },
 });
