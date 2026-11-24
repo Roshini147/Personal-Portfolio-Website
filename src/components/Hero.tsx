@@ -10,7 +10,6 @@ import {
   MapPin,
   ChevronDown
 } from 'lucide-react';
-import { Hero3DCanvas } from './3d/Hero3DCanvas';
 import { personalInfo, socialLinks } from '../data/portfolioData';
 
 interface HeroProps {
@@ -38,9 +37,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
       id="home"
       className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      {/* 3D Isometric Geometric Canvas */}
-      <Hero3DCanvas />
-
       <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
         {/* Location pill */}
         <motion.div

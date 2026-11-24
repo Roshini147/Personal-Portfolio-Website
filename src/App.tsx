@@ -88,15 +88,14 @@ export const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-[#04161a] text-cream-100 flex flex-col selection:bg-coral-500/30 selection:text-cream-50 overflow-x-hidden font-sans">
-      {/* Dynamic 3D ambient light sweeps and diagonal isometric radiance */}
+      {/* Dynamic 3D ambient light radiance (no static images) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[34rem] h-[34rem] bg-coral-500/12 rounded-full blur-[140px] animate-light-sweep" />
-        <div className="absolute top-1/2 -left-48 w-[40rem] h-[40rem] bg-teal-500/15 rounded-full blur-[160px] animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-10 right-0 w-[32rem] h-[32rem] bg-coral-500/10 rounded-full blur-[140px]" />
-        <div className="absolute inset-0 isometric-grid-bg opacity-35" />
+        <div className="absolute -top-32 -right-32 w-[34rem] h-[34rem] bg-coral-500/10 rounded-full blur-[140px] animate-light-sweep" />
+        <div className="absolute top-1/2 -left-48 w-[40rem] h-[40rem] bg-teal-500/12 rounded-full blur-[160px] animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-10 right-0 w-[32rem] h-[32rem] bg-coral-500/8 rounded-full blur-[140px]" />
       </div>
 
-      {/* 3D Motion Animated Background: Undulating 3D image canvas, 18 floating geometric objects, light tracking & particles */}
+      {/* Pure Procedural 3D Motion Animated Background: Flowing wave grid, floating polyhedra & constellation particles */}
       <Global3DBackground />
 
       {/* Navigation */}

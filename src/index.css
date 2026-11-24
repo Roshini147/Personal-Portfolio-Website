@@ -40,7 +40,7 @@
 }
 
 @layer components {
-  /* Isometric & Glassmorphic Deep Teal Card with subtle Cream borders and Coral focus */
+  /* Glassmorphic Deep Teal Card with subtle Cream borders and Coral focus */
   .pro-card {
     background: linear-gradient(145deg, rgba(11, 45, 53, 0.85) 0%, rgba(7, 34, 40, 0.95) 100%);
     border: 1px solid rgba(250, 247, 242, 0.08);
@@ -69,31 +69,20 @@
 @keyframes lightSweep {
   0% {
     transform: translate(-10%, -10%) rotate(25deg);
-    opacity: 0.25;
+    opacity: 0.2;
   }
   50% {
     transform: translate(15%, 10%) rotate(30deg);
-    opacity: 0.45;
+    opacity: 0.35;
   }
   100% {
     transform: translate(-10%, -10%) rotate(25deg);
-    opacity: 0.25;
+    opacity: 0.2;
   }
 }
 
 .animate-light-sweep {
   animation: lightSweep 16s ease-in-out infinite;
-}
-
-/* Subtle isometric decorative grid pattern */
-.isometric-grid-bg {
-  background-image: 
-    linear-gradient(30deg, rgba(45, 212, 191, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(45, 212, 191, 0.035) 87.5%, rgba(45, 212, 191, 0.035)),
-    linear-gradient(150deg, rgba(45, 212, 191, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(45, 212, 191, 0.035) 87.5%, rgba(45, 212, 191, 0.035)),
-    linear-gradient(30deg, rgba(45, 212, 191, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(45, 212, 191, 0.035) 87.5%, rgba(45, 212, 191, 0.035)),
-    linear-gradient(150deg, rgba(45, 212, 191, 0.035) 12%, transparent 12.5%, transparent 87%, rgba(45, 212, 191, 0.035) 87.5%, rgba(45, 212, 191, 0.035));
-  background-size: 80px 140px;
-  background-position: 0 0, 0 0, 40px 70px, 40px 70px;
 }
 
 @media (prefers-reduced-motion: reduce) {
