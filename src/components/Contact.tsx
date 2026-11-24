@@ -47,57 +47,50 @@ export const Contact: React.FC = () => {
     setSubmitStatus('idle');
     setFeedbackMessage(null);
 
-    const payload = new FormData();
-    payload.append('name', formData.name.trim());
-    payload.append('email', formData.email.trim());
-    payload.append('subject', formData.subject.trim());
-    payload.append('message', formData.message.trim());
-    payload.append('_subject', `New Portfolio Inquiry: ${formData.subject.trim()}`);
-    payload.append('_template', 'table');
-    payload.append('_captcha', 'false');
-
-    let submittedSuccessfully = false;
-
-    // 1. Try background AJAX submission with 4-second timeout
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-      const response = await fetch('https://formsubmit.co/ajax/roshini120075@gmail.com', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-        },
-        body: payload,
-        signal: controller.signal,
-      });
+      let fetchDelivered = false;
 
-      clearTimeout(timeoutId);
-
-      const data = await response.json().catch(() => null);
-      if (response.ok && (data?.success === 'true' || data?.success === true || response.status === 200)) {
-        submittedSuccessfully = true;
-      }
-    } catch {
-      // If fetch fails or times out (common on CORS/Cloudflare), seamlessly use hidden iframe fallback
-      submittedSuccessfully = false;
-    }
-
-    // 2. Seamless hidden iframe fallback to guarantee delivery without redirection or CORS failure
-    if (!submittedSuccessfully && formRef.current) {
       try {
-        formRef.current.submit();
-        submittedSuccessfully = true;
-      } catch {
-        submittedSuccessfully = false;
-      }
-    }
+        const response = await fetch('https://shipmyform.com/to/roshini120075@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
+          }),
+          signal: controller.signal,
+        });
 
-    if (submittedSuccessfully) {
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          fetchDelivered = true;
+        }
+      } catch {
+        clearTimeout(timeoutId);
+        fetchDelivered = false;
+      }
+
+      // If direct fetch was blocked by browser restrictions or ad-blockers, fallback to background submission via hidden iframe
+      if (!fetchDelivered && formRef.current) {
+        formRef.current.submit();
+      }
+
+      // Display professional success confirmation
       setSubmitStatus('success');
       setFeedbackMessage(
         'Thank you for contacting me! Your message has been sent successfully.'
       );
+
+      // Reset form fields
       setFormData({
         name: '',
         email: '',
@@ -105,14 +98,14 @@ export const Contact: React.FC = () => {
         message: '',
       });
       setErrors({});
-    } else {
+    } catch {
       setSubmitStatus('error');
       setFeedbackMessage(
-        'Sorry, there was an issue sending your message. Please reach out directly to roshini120075@gmail.com.'
+        'Unable to send message right now. Please reach out directly at roshini120075@gmail.com.'
       );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   const handleCopyEmail = () => {
@@ -123,12 +116,11 @@ export const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 relative">
-      {/* Hidden iframe target for 100% reliable background submission without page navigation or redirects */}
+      {/* Hidden iframe target for background submission with zero redirects or new tabs */}
       <iframe
-        name="contact_hidden_iframe"
-        id="contact_hidden_iframe"
-        title="Form Target"
-        className="hidden"
+        name="shipmyform_iframe"
+        id="shipmyform_iframe"
+        title="Background Submission Frame"
         style={{ display: 'none', width: 0, height: 0, border: 'none' }}
       />
 
@@ -200,7 +192,7 @@ export const Contact: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Collaboration Status */}
+                  {/* Opportunities */}
                   <div className="p-3.5 rounded-xl bg-teal-950/40 border border-teal-700/40 flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-coral-500/15 text-coral-400">
                       <Sparkles className="w-4 h-4" />
@@ -222,22 +214,13 @@ export const Contact: React.FC = () => {
             <Tilt3DCard maxTilt={4}>
               <form
                 ref={formRef}
-                action="https://formsubmit.co/roshini120075@gmail.com"
+                action="https://shipmyform.com/to/roshini120075@gmail.com"
                 method="POST"
-                target="contact_hidden_iframe"
+                target="shipmyform_iframe"
                 onSubmit={handleSubmit}
                 noValidate
                 className="p-7 sm:p-8 rounded-2xl bg-[#0b2d35]/90 border border-cream-100/10 space-y-4 shadow-xl backdrop-blur-md"
               >
-                {/* FormSubmit Configuration Fields */}
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_template" value="table" />
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value={formData.subject.trim() ? `New Portfolio Message: ${formData.subject.trim()}` : 'New Portfolio Inquiry'}
-                />
-
                 <h3 className="text-base font-semibold text-cream-50 mb-2">
                   Send a Message
                 </h3>
@@ -265,7 +248,7 @@ export const Contact: React.FC = () => {
                     <input
                       type="text"
                       name="name"
-                      disabled={isSubmitting}
+                      readOnly={isSubmitting}
                       value={formData.name}
                       onChange={(e) => {
                         setFormData({ ...formData, name: e.target.value });
@@ -286,7 +269,7 @@ export const Contact: React.FC = () => {
                     <input
                       type="email"
                       name="email"
-                      disabled={isSubmitting}
+                      readOnly={isSubmitting}
                       value={formData.email}
                       onChange={(e) => {
                         setFormData({ ...formData, email: e.target.value });
@@ -308,7 +291,7 @@ export const Contact: React.FC = () => {
                   <input
                     type="text"
                     name="subject"
-                    disabled={isSubmitting}
+                    readOnly={isSubmitting}
                     value={formData.subject}
                     onChange={(e) => {
                       setFormData({ ...formData, subject: e.target.value });
@@ -329,7 +312,7 @@ export const Contact: React.FC = () => {
                   <textarea
                     rows={4}
                     name="message"
-                    disabled={isSubmitting}
+                    readOnly={isSubmitting}
                     value={formData.message}
                     onChange={(e) => {
                       setFormData({ ...formData, message: e.target.value });
