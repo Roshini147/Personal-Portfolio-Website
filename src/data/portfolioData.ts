@@ -25,7 +25,6 @@ export const personalInfo = {
   },
   location: 'Chennai, India',
   email: 'roshini120075@gmail.com',
-  phone: '+91 9363120075',
   profileImage: '/assets/profile/roshini-image.png',
   resumeFile: '/assets/resume/resume.png',
   stats: [
