@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Raw design assets & scratch
+background_asset/
+*.eps
+*.ai
+thumbnail.image.png

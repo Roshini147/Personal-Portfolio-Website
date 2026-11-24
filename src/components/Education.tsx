@@ -8,10 +8,10 @@ export const Education: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div className="mb-14">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-coral-400 mb-2">
             Academics
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-cream-50 mb-3">
             Education
           </h2>
         </div>
@@ -20,32 +20,32 @@ export const Education: React.FC = () => {
         <div className="space-y-6">
           {educationHistory.map((edu, idx) => (
             <Tilt3DCard key={idx} maxTilt={5}>
-              <div className="p-6 sm:p-7 rounded-2xl bg-[#0d1017] border border-white/10 hover:border-white/20 transition-colors">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-3 border-b border-white/5">
+              <div className="p-6 sm:p-7 rounded-2xl bg-[#0b2d35]/90 border border-cream-100/10 hover:border-coral-500/30 transition-colors shadow-lg backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-3 border-b border-cream-100/5">
                   <div>
-                    <span className="text-xs font-medium text-blue-400">
+                    <span className="text-xs font-semibold text-coral-400">
                       {edu.period}
                     </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-white mt-0.5">
+                    <h3 className="text-lg sm:text-xl font-bold text-cream-50 mt-0.5">
                       {edu.degree}
                     </h3>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-cream-400 mt-1">
                       {edu.institution} — {edu.location}
                     </p>
                   </div>
 
                   <div className="sm:text-right shrink-0">
-                    <span className="text-sm font-bold text-white px-2.5 py-1 rounded bg-white/5 border border-white/10">
+                    <span className="text-sm font-bold text-cream-50 px-3 py-1 rounded-lg bg-teal-900/70 border border-cream-100/15 inline-block">
                       {edu.score}
                     </span>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-cream-400 mt-1">
                       {edu.scoreLabel}
                     </p>
                   </div>
                 </div>
 
                 {edu.highlights && (
-                  <ul className="space-y-1.5 text-xs text-slate-400">
+                  <ul className="space-y-1.5 text-xs text-cream-300">
                     {edu.highlights.map((item, hIdx) => (
                       <li key={hIdx} className="leading-relaxed">
                         • {item}

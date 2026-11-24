@@ -30,7 +30,6 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
   isOpen,
   onClose,
   title,
-  subtitle,
   documentType,
   filePath,
   issueDate,
@@ -38,7 +37,6 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
   signatory,
   credentialId,
   verificationUrl,
-  notes,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
@@ -137,7 +135,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
       {isOpen && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-black/85 backdrop-blur-md overflow-hidden"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 bg-[#04161a]/85 backdrop-blur-md overflow-hidden"
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
@@ -147,22 +145,22 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#0e111a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#072228] border border-cream-100/10 rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 bg-[#141824] border-b border-white/10">
+            <div className="flex items-center justify-between px-5 py-3.5 bg-[#0b2d35] border-b border-cream-100/10">
               <div className="truncate pr-3">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
+                  <span className="text-xs px-2.5 py-0.5 rounded bg-coral-500/15 text-coral-300 border border-coral-500/30 font-medium">
                     {documentType}
                   </span>
                   {credentialId && (
-                    <span className="text-xs text-slate-400 hidden sm:inline">
+                    <span className="text-xs text-cream-400 hidden sm:inline">
                       ID: {credentialId}
                     </span>
                   )}
                 </div>
-                <h3 className="text-base font-semibold text-white truncate">
+                <h3 className="text-base font-semibold text-cream-50 truncate">
                   {title}
                 </h3>
               </div>
@@ -173,7 +171,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                   type="button"
                   onClick={handleZoomOut}
                   disabled={zoomLevel <= 0.6}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition disabled:opacity-30"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-cream-50 transition disabled:opacity-30"
                   title="Zoom Out"
                   aria-label="Zoom Out"
                 >
@@ -183,7 +181,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                 <button
                   type="button"
                   onClick={handleResetZoom}
-                  className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 hover:text-white transition"
+                  className="px-2.5 py-1.5 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-xs font-medium text-cream-300 hover:text-cream-50 transition"
                   title="Reset Zoom"
                 >
                   {Math.round(zoomLevel * 100)}%
@@ -193,7 +191,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                   type="button"
                   onClick={handleZoomIn}
                   disabled={zoomLevel >= 3.5}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition disabled:opacity-30"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-cream-50 transition disabled:opacity-30"
                   title="Zoom In"
                   aria-label="Zoom In"
                 >
@@ -203,7 +201,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                 <button
                   type="button"
                   onClick={handleRotate}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition hidden sm:inline-flex"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-cream-50 transition hidden sm:inline-flex"
                   title="Rotate"
                   aria-label="Rotate"
                 >
@@ -213,7 +211,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                 <button
                   type="button"
                   onClick={toggleFullscreen}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition hidden sm:inline-flex"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-cream-50 transition hidden sm:inline-flex"
                   title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
                   aria-label="Fullscreen"
                 >
@@ -224,7 +222,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                   href={filePath}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition hidden sm:inline-flex"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-coral-400 transition hidden sm:inline-flex"
                   title="Open in New Tab"
                   aria-label="Open in New Tab"
                 >
@@ -234,7 +232,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-1.5 text-xs font-medium"
+                  className="px-3.5 py-1.5 rounded-lg bg-coral-500 hover:bg-coral-600 text-cream-50 transition flex items-center gap-1.5 text-xs font-semibold shadow-md shadow-coral-500/20"
                   title="Download File"
                 >
                   <Download className="w-3.5 h-3.5" />
@@ -244,7 +242,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition ml-1"
+                  className="p-2 rounded-lg bg-teal-900/60 hover:bg-rose-500/20 text-cream-400 hover:text-rose-400 transition ml-1"
                   title="Close (Esc)"
                   aria-label="Close"
                 >
@@ -259,18 +257,18 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              className={`relative flex-1 min-h-[50vh] max-h-[70vh] bg-[#07090f] flex items-center justify-center p-4 sm:p-6 overflow-hidden select-none ${
+              className={`relative flex-1 min-h-[50vh] max-h-[70vh] bg-[#031114] flex items-center justify-center p-4 sm:p-6 overflow-hidden select-none ${
                 zoomLevel > 1 ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'
               }`}
             >
               {hasError ? (
                 <div className="text-center p-6 space-y-3">
-                  <p className="text-sm text-slate-300">Unable to preview document directly.</p>
+                  <p className="text-sm text-cream-300">Unable to preview document directly.</p>
                   <a
                     href={filePath}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-coral-500 hover:bg-coral-600 text-cream-50 text-xs font-semibold"
                   >
                     <span>Open Document File Directly</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -289,35 +287,35 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                     src={filePath}
                     alt={title}
                     onError={() => setHasError(true)}
-                    className="max-h-[66vh] max-w-full w-auto h-auto object-contain rounded border border-white/10 shadow-xl"
+                    className="max-h-[66vh] max-w-full w-auto h-auto object-contain rounded border border-cream-100/10 shadow-xl"
                     draggable={false}
                   />
                 </div>
               )}
 
               {zoomLevel > 1 && !hasError && (
-                <div className="absolute bottom-3 left-4 px-3 py-1 bg-black/70 border border-white/10 rounded-full text-xs text-slate-300 pointer-events-none">
+                <div className="absolute bottom-3 left-4 px-3 py-1 bg-black/70 border border-cream-100/10 rounded-full text-xs text-cream-300 pointer-events-none">
                   Drag to pan
                 </div>
               )}
             </div>
 
             {/* Footer Information */}
-            <div className="px-5 py-3 bg-[#141824] border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+            <div className="px-5 py-3 bg-[#0b2d35] border-t border-cream-100/10 flex flex-wrap items-center justify-between gap-3 text-xs text-cream-400">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
                 {issuer && (
                   <span>
-                    <strong className="text-slate-300">Issuer:</strong> {issuer}
+                    <strong className="text-cream-200">Issuer:</strong> {issuer}
                   </span>
                 )}
                 {issueDate && (
                   <span>
-                    <strong className="text-slate-300">Date:</strong> {issueDate}
+                    <strong className="text-cream-200">Date:</strong> {issueDate}
                   </span>
                 )}
                 {signatory && (
                   <span>
-                    <strong className="text-slate-300">Signatory:</strong> {signatory}
+                    <strong className="text-cream-200">Signatory:</strong> {signatory}
                   </span>
                 )}
               </div>
@@ -328,7 +326,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                     href={verificationUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 transition font-medium inline-flex items-center gap-1"
+                    className="text-coral-400 hover:text-coral-300 transition font-semibold inline-flex items-center gap-1"
                   >
                     <span>Verify Online</span>
                     <ExternalLink className="w-3 h-3" />
@@ -338,7 +336,7 @@ export const DocumentModalViewer: React.FC<DocumentViewerProps> = ({
                   href={filePath}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-400 hover:text-white transition text-xs"
+                  className="text-cream-400 hover:text-cream-100 transition text-xs"
                 >
                   Direct File Link
                 </a>

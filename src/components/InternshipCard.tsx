@@ -14,31 +14,31 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
 }) => {
   return (
     <Tilt3DCard maxTilt={6}>
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#0d1017] border border-white/10 hover:border-white/20 transition-all duration-300 flex flex-col justify-between h-full group">
+      <div className="p-6 sm:p-7 rounded-2xl bg-[#0b2d35]/90 border border-cream-100/10 hover:border-coral-500/30 transition-all duration-300 flex flex-col justify-between h-full group shadow-lg backdrop-blur-sm">
         <div>
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 mb-4 border-b border-white/5">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 mb-4 border-b border-cream-100/5">
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs px-2.5 py-0.5 rounded bg-white/5 text-slate-300 border border-white/10">
+                <span className="text-xs px-2.5 py-0.5 rounded bg-teal-900/60 text-cream-300 border border-cream-100/10">
                   {internship.mode}
                 </span>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-cream-400">
                   {internship.location}
                 </span>
               </div>
 
-              <h3 className="text-xl font-bold text-white tracking-tight">
+              <h3 className="text-xl font-bold text-cream-50 tracking-tight">
                 {internship.role}
               </h3>
 
-              <div className="text-sm font-medium text-blue-400 mt-0.5">
+              <div className="text-sm font-semibold text-coral-400 mt-0.5">
                 {internship.company}
               </div>
             </div>
 
             <div className="sm:text-right shrink-0">
-              <span className="text-xs font-medium text-slate-300 px-3 py-1 rounded-lg bg-white/5 border border-white/5 inline-block">
+              <span className="text-xs font-medium text-cream-200 px-3 py-1 rounded-lg bg-teal-900/60 border border-cream-100/10 inline-block">
                 {internship.displayPeriod}
               </span>
             </div>
@@ -46,10 +46,10 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
 
           {/* Responsibilities */}
           <div className="mb-5 space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-cream-400 mb-2">
               Responsibilities
             </h4>
-            <ul className="space-y-1.5 text-xs text-slate-300">
+            <ul className="space-y-1.5 text-xs text-cream-200">
               {internship.responsibilities.map((resp, idx) => (
                 <li key={idx} className="leading-relaxed">
                   • {resp}
@@ -64,7 +64,7 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
               {internship.technologies.map((tech, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-0.5 rounded bg-white/[0.03] border border-white/5 text-xs text-slate-300"
+                  className="px-2.5 py-0.5 rounded bg-teal-950/40 border border-teal-700/40 text-xs text-cream-300"
                 >
                   {tech}
                 </span>
@@ -74,7 +74,7 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
         </div>
 
         {/* Certificate Button (Offer letter removed per request) */}
-        <div className="pt-4 border-t border-white/5">
+        <div className="pt-4 border-t border-cream-100/5">
           {internship.completionCertificate.isAvailable ? (
             <button
               type="button"
@@ -85,13 +85,13 @@ export const InternshipCard: React.FC<InternshipCardProps> = ({
                   internship.role
                 )
               }
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all duration-200 shadow-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-coral-500 hover:bg-coral-600 active:bg-coral-700 text-cream-50 text-xs font-semibold transition-all duration-200 shadow-md shadow-coral-500/20 cursor-pointer"
             >
               <span>View Certificate</span>
               <Eye className="w-4 h-4" />
             </button>
           ) : (
-            <div className="w-full py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-slate-500 text-xs text-center font-medium">
+            <div className="w-full py-2.5 rounded-xl bg-teal-950/40 border border-teal-800/40 text-cream-500 text-xs text-center font-medium">
               Certificate Pending
             </div>
           )}

@@ -87,7 +87,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-blue-600/30 selection:text-white overflow-x-hidden font-sans">
+    <div className="relative min-h-screen bg-[#04161a] text-cream-100 flex flex-col selection:bg-coral-500/30 selection:text-cream-50 overflow-x-hidden font-sans">
+      {/* Decorative ambient color layers echoing the isometric design */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-coral-500/10 rounded-full blur-[120px]" />
+        <div className="absolute top-1/3 -left-40 w-[30rem] h-[30rem] bg-teal-500/15 rounded-full blur-[140px]" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-coral-500/10 rounded-full blur-[130px]" />
+        <div className="absolute inset-0 isometric-grid-bg opacity-30" />
+      </div>
+
       {/* 3D Animated Background across entire website */}
       <Global3DBackground />
 

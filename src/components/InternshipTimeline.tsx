@@ -15,13 +15,13 @@ export const InternshipTimeline: React.FC<InternshipTimelineProps> = ({
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-14">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-coral-400 mb-2">
             Experience
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-cream-50 mb-3">
             Internship Experience
           </h2>
-          <p className="text-sm text-slate-400 max-w-xl">
+          <p className="text-sm text-cream-400 max-w-xl">
             Practical development experience across software engineering, full-stack web applications, and artificial intelligence.
           </p>
         </div>

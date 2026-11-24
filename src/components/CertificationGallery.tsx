@@ -16,13 +16,13 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-14">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-coral-400 mb-2">
             Credentials
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-cream-50 mb-3">
             Certifications
           </h2>
-          <p className="text-sm text-slate-400 max-w-xl">
+          <p className="text-sm text-cream-400 max-w-xl">
             Verified certifications from Infosys Springboard, Microsoft, HP LIFE, Google Cloud, Accenture, and IBM.
           </p>
         </div>
@@ -31,12 +31,12 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {certifications.map((cert) => (
             <Tilt3DCard key={cert.id} maxTilt={6}>
-              <div className="rounded-2xl bg-[#0d1017] border border-white/10 hover:border-white/20 transition-colors overflow-hidden flex flex-col justify-between h-full">
+              <div className="rounded-2xl bg-[#0b2d35]/90 border border-cream-100/10 hover:border-coral-500/30 transition-colors overflow-hidden flex flex-col justify-between h-full shadow-lg backdrop-blur-sm">
                 <div>
                   {/* Certificate Image Thumbnail */}
                   <div
                     onClick={() => onViewCertificate(cert)}
-                    className="relative aspect-[16/11] bg-[#07090f] border-b border-white/5 overflow-hidden cursor-pointer group/thumb"
+                    className="relative aspect-[16/11] bg-teal-950/80 border-b border-cream-100/5 overflow-hidden cursor-pointer group/thumb"
                   >
                     <img
                       src={cert.imagePath}
@@ -44,8 +44,8 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
                       className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-black/20 group-hover/thumb:bg-black/40 transition-colors flex items-center justify-center">
-                      <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium">
+                    <div className="absolute inset-0 bg-[#04161a]/30 group-hover/thumb:bg-[#04161a]/60 transition-colors flex items-center justify-center">
+                      <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-coral-500 text-cream-50 text-xs font-semibold shadow-md">
                         <Eye className="w-3.5 h-3.5" />
                         <span>Inspect Certificate</span>
                       </span>
@@ -54,8 +54,8 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
 
                   {/* Information */}
                   <div className="p-5">
-                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-                      <span className="font-medium text-blue-400">
+                    <div className="flex items-center justify-between text-xs text-cream-400 mb-1.5">
+                      <span className="font-semibold text-coral-400">
                         {cert.issuer}
                       </span>
                       <span className="text-xs">
@@ -65,12 +65,12 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
 
                     <h3
                       onClick={() => onViewCertificate(cert)}
-                      className="text-base font-bold text-white hover:text-blue-400 transition cursor-pointer mb-2 leading-snug"
+                      className="text-base font-bold text-cream-50 hover:text-coral-400 transition cursor-pointer mb-2 leading-snug"
                     >
                       {cert.title}
                     </h3>
 
-                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                    <p className="text-xs text-cream-300 line-clamp-2 leading-relaxed mb-4">
                       {cert.summary}
                     </p>
 
@@ -78,7 +78,7 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
                       {cert.skills.map((skill, sIdx) => (
                         <span
                           key={sIdx}
-                          className="px-2.5 py-0.5 rounded bg-white/[0.03] border border-white/5 text-xs text-slate-300"
+                          className="px-2.5 py-0.5 rounded bg-teal-950/40 border border-teal-700/40 text-xs text-cream-300"
                         >
                           {skill}
                         </span>
@@ -92,7 +92,7 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
                   <button
                     type="button"
                     onClick={() => onViewCertificate(cert)}
-                    className="flex-1 py-2 px-3 rounded-xl bg-blue-600/10 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/20 text-xs font-medium flex items-center justify-center gap-1.5 transition"
+                    className="flex-1 py-2 px-3 rounded-xl bg-coral-500/15 hover:bg-coral-500 text-coral-300 hover:text-cream-50 border border-coral-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>View Certificate</span>
@@ -103,7 +103,7 @@ export const CertificationGallery: React.FC<CertificationGalleryProps> = ({
                       href={cert.verificationUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition"
+                      className="p-2 rounded-xl bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-coral-400 border border-cream-100/10 transition"
                       title="Verify Online"
                       aria-label="Verify Online"
                     >

@@ -19,14 +19,14 @@ export const CodingProfiles: React.FC = () => {
       handle: 'Roshini147',
       url: 'https://github.com/Roshini147',
       description: 'Repositories for Full-Stack applications, academic projects, and open source exploration.',
-      icon: <Github className="w-5 h-5 text-white" />,
+      icon: <Github className="w-5 h-5 text-cream-50" />,
     },
     {
       name: 'LinkedIn',
       handle: 'roshini-a-156324338',
       url: 'https://www.linkedin.com/in/roshini-a-156324338',
       description: 'Professional engineering network, industry endorsements, and career milestones.',
-      icon: <Linkedin className="w-5 h-5 text-[#0a66c2]" />,
+      icon: <Linkedin className="w-5 h-5 text-[#38bdf8]" />,
     },
     {
       name: 'LeetCode',
@@ -40,7 +40,7 @@ export const CodingProfiles: React.FC = () => {
       handle: 'roshini120075',
       url: 'https://www.hackerrank.com/profile/roshini120075',
       description: 'Problem solving badges, domain certifications, and competitive programming.',
-      icon: <Terminal className="w-5 h-5 text-[#00ea64]" />,
+      icon: <Terminal className="w-5 h-5 text-[#2dd4bf]" />,
     },
   ];
 
@@ -55,13 +55,13 @@ export const CodingProfiles: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-14">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-coral-400 mb-2">
             Online Presence
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-cream-50 mb-3">
             Profiles & Networks
           </h2>
-          <p className="text-sm text-slate-400 max-w-xl">
+          <p className="text-sm text-cream-400 max-w-xl">
             Verified links across algorithmic problem solving platforms, source repositories, and professional networks.
           </p>
         </div>
@@ -70,31 +70,31 @@ export const CodingProfiles: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {profiles.map((profile, idx) => (
             <Tilt3DCard key={profile.name} maxTilt={6}>
-              <div className="p-6 rounded-2xl bg-[#0d1017] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-between h-full">
+              <div className="p-6 rounded-2xl bg-[#0b2d35]/90 border border-cream-100/10 hover:border-coral-500/30 transition-colors flex flex-col justify-between h-full shadow-lg backdrop-blur-sm">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5">
+                    <div className="p-2.5 rounded-xl bg-teal-900/60 border border-cream-100/10">
                       {profile.icon}
                     </div>
                   </div>
 
-                  <h3 className="text-base font-bold text-white mb-0.5">
+                  <h3 className="text-base font-bold text-cream-50 mb-0.5">
                     {profile.name}
                   </h3>
-                  <p className="text-xs text-blue-400 mb-3 truncate">
+                  <p className="text-xs text-coral-400 mb-3 truncate font-medium">
                     @{profile.handle}
                   </p>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-5">
+                  <p className="text-xs text-cream-300 leading-relaxed mb-5">
                     {profile.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-cream-100/5 flex items-center justify-between gap-2">
                   <a
                     href={profile.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-blue-600/10 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/20 text-xs font-medium transition"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-coral-500/15 hover:bg-coral-500 text-coral-300 hover:text-cream-50 border border-coral-500/30 text-xs font-semibold transition"
                   >
                     <span>Visit</span>
                     <ExternalLink className="w-3 h-3" />
@@ -103,7 +103,7 @@ export const CodingProfiles: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleCopy(profile.url, idx)}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition"
+                    className="p-2 rounded-xl bg-teal-900/60 hover:bg-teal-850 text-cream-300 hover:text-cream-50 border border-cream-100/10 transition"
                     title="Copy URL"
                     aria-label="Copy URL"
                   >

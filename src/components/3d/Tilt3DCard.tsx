@@ -45,7 +45,7 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
       setGlarePosition({
         x: (mouseX / width) * 100,
         y: (mouseY / height) * 100,
-        opacity: 0.16,
+        opacity: 0.18,
       });
     }
   };
@@ -77,7 +77,7 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
           className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 overflow-hidden"
           style={{
             opacity: glarePosition.opacity,
-            background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(255, 255, 255, 0.28) 0%, rgba(59, 130, 246, 0.08) 45%, transparent 80%)`,
+            background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(250, 247, 242, 0.22) 0%, rgba(255, 111, 97, 0.1) 40%, transparent 75%)`,
           }}
         />
       )}

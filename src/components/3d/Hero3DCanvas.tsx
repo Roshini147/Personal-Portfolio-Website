@@ -10,14 +10,13 @@ export const Hero3DCanvas: React.FC = () => {
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Isometric-angled perspective
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      container.clientWidth / container.clientHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 24;
+    const aspect = container.clientWidth / container.clientHeight;
+    const camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
+    // Angled isometric viewpoint
+    camera.position.set(16, 12, 18);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -32,63 +31,151 @@ export const Hero3DCanvas: React.FC = () => {
     const masterGroup = new THREE.Group();
     scene.add(masterGroup);
 
-    // 1. Outer Geometric Icosahedron Cage
-    const geometry = new THREE.IcosahedronGeometry(7, 2);
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
-      color: 0x3b82f6,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.2,
-    });
-    const outerMesh = new THREE.Mesh(geometry, wireframeMaterial);
-    masterGroup.add(outerMesh);
+    // Color definitions
+    const COLOR_DEEP_TEAL = 0x0b2d35;
+    const COLOR_TEAL_ACCENT = 0x14b8a6;
+    const COLOR_CORAL = 0xff6f61;
+    const COLOR_CREAM = 0xfaf7f2;
 
-    // 2. Inner Polyhedron Core
-    const innerGeometry = new THREE.OctahedronGeometry(4, 1);
-    const innerMaterial = new THREE.MeshStandardMaterial({
-      color: 0x06b6d4,
+    // 1. Isometric Layered Platform 1 (Bottom Tier)
+    const basePlateGeo = new THREE.CylinderGeometry(7.5, 8.5, 0.35, 6);
+    const basePlateMat = new THREE.MeshStandardMaterial({
+      color: COLOR_DEEP_TEAL,
+      roughness: 0.4,
+      metalness: 0.6,
+      transparent: true,
+      opacity: 0.4,
+      wireframe: false,
+    });
+    const basePlate = new THREE.Mesh(basePlateGeo, basePlateMat);
+    basePlate.position.y = -3;
+    masterGroup.add(basePlate);
+
+    const basePlateWireMat = new THREE.MeshBasicMaterial({
+      color: COLOR_TEAL_ACCENT,
       wireframe: true,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.45,
+    });
+    const basePlateWire = new THREE.Mesh(basePlateGeo, basePlateWireMat);
+    basePlateWire.position.y = -3;
+    masterGroup.add(basePlateWire);
+
+    // 2. Middle Floating Isometric Platform
+    const midPlateGeo = new THREE.CylinderGeometry(5.2, 5.8, 0.25, 6);
+    const midPlateMat = new THREE.MeshStandardMaterial({
+      color: 0x103943,
       roughness: 0.3,
       metalness: 0.7,
+      transparent: true,
+      opacity: 0.5,
     });
-    const innerMesh = new THREE.Mesh(innerGeometry, innerMaterial);
-    masterGroup.add(innerMesh);
+    const midPlate = new THREE.Mesh(midPlateGeo, midPlateMat);
+    midPlate.position.y = -1;
+    masterGroup.add(midPlate);
 
-    // 3. Glowing Node Vertices
-    const positions = geometry.attributes.position.array;
-    const nodeGeometry = new THREE.BufferGeometry();
-    nodeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const midPlateWireMat = new THREE.MeshBasicMaterial({
+      color: COLOR_CORAL,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.55,
+    });
+    const midPlateWire = new THREE.Mesh(midPlateGeo, midPlateWireMat);
+    midPlateWire.position.y = -1;
+    masterGroup.add(midPlateWire);
 
-    const nodeMaterial = new THREE.PointsMaterial({
-      color: 0x60a5fa,
-      size: 0.18,
+    // 3. Central Isometric Crystal / Tech Core
+    const coreGeo = new THREE.OctahedronGeometry(2.4, 0);
+    const coreMat = new THREE.MeshStandardMaterial({
+      color: COLOR_CORAL,
+      roughness: 0.2,
+      metalness: 0.8,
+      transparent: true,
+      opacity: 0.7,
+    });
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    coreMesh.position.y = 1.2;
+    masterGroup.add(coreMesh);
+
+    const coreWireMat = new THREE.MeshBasicMaterial({
+      color: COLOR_CREAM,
+      wireframe: true,
       transparent: true,
       opacity: 0.8,
-      blending: THREE.AdditiveBlending,
     });
-    const nodePoints = new THREE.Points(nodeGeometry, nodeMaterial);
-    masterGroup.add(nodePoints);
+    const coreWire = new THREE.Mesh(coreGeo, coreWireMat);
+    coreWire.position.y = 1.2;
+    masterGroup.add(coreWire);
 
-    // 4. Orbiting Ambient Ring
-    const ringGeo = new THREE.TorusGeometry(8.5, 0.08, 16, 64);
+    // 4. Orbiting Isometric Ring in Coral
+    const ringGeo = new THREE.TorusGeometry(5, 0.06, 16, 64);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
+      color: COLOR_CORAL,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.6,
     });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-    ringMesh.rotation.x = Math.PI / 3;
+    ringMesh.rotation.x = Math.PI / 2.5;
+    ringMesh.position.y = 1.2;
     masterGroup.add(ringMesh);
 
+    // 5. Floating Isometric Data Cubes / Pillars
+    const cubeGroup = new THREE.Group();
+    const cubeGeo = new THREE.BoxGeometry(0.7, 1.4, 0.7);
+    const cubeCount = 6;
+    const cubes: THREE.Mesh[] = [];
+
+    for (let i = 0; i < cubeCount; i++) {
+      const angle = (i / cubeCount) * Math.PI * 2;
+      const radius = 4.2;
+      const cubeMat = new THREE.MeshStandardMaterial({
+        color: i % 2 === 0 ? COLOR_TEAL_ACCENT : COLOR_CORAL,
+        roughness: 0.3,
+        metalness: 0.7,
+        transparent: true,
+        opacity: 0.75,
+      });
+      const cube = new THREE.Mesh(cubeGeo, cubeMat);
+      cube.position.set(Math.cos(angle) * radius, 0.2, Math.sin(angle) * radius);
+      cube.rotation.y = angle;
+      cubeGroup.add(cube);
+      cubes.push(cube);
+    }
+    masterGroup.add(cubeGroup);
+
+    // 6. Constellation nodes on isometric perimeter
+    const nodeCount = 36;
+    const nodePositions = new Float32Array(nodeCount * 3);
+    for (let i = 0; i < nodeCount; i++) {
+      const angle = (i / nodeCount) * Math.PI * 2;
+      const r = 6.8 + (Math.sin(i * 3) * 0.8);
+      nodePositions[i * 3] = Math.cos(angle) * r;
+      nodePositions[i * 3 + 1] = -2.2 + (Math.sin(i * 2) * 0.8);
+      nodePositions[i * 3 + 2] = Math.sin(angle) * r;
+    }
+    const nodeGeo = new THREE.BufferGeometry();
+    nodeGeo.setAttribute('position', new THREE.BufferAttribute(nodePositions, 3));
+    const nodeMat = new THREE.PointsMaterial({
+      color: COLOR_CREAM,
+      size: 0.2,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+    });
+    const nodePoints = new THREE.Points(nodeGeo, nodeMat);
+    masterGroup.add(nodePoints);
+
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0x3b82f6, 3, 40);
-    pointLight.position.set(10, 10, 10);
-    scene.add(pointLight);
+    const coralLight = new THREE.PointLight(COLOR_CORAL, 3.5, 30);
+    coralLight.position.set(8, 12, 10);
+    scene.add(coralLight);
+
+    const tealLight = new THREE.PointLight(COLOR_TEAL_ACCENT, 2.5, 30);
+    tealLight.position.set(-10, -5, -8);
+    scene.add(tealLight);
 
     // Mouse Interaction
     let targetX = 0;
@@ -98,8 +185,8 @@ export const Hero3DCanvas: React.FC = () => {
 
     const handleMouseMove = (event: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
-      targetX = (event.clientX / innerWidth - 0.5) * 1.5;
-      targetY = (event.clientY / innerHeight - 0.5) * 1.5;
+      targetX = (event.clientX / innerWidth - 0.5) * 1.2;
+      targetY = (event.clientY / innerHeight - 0.5) * 1.2;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -121,28 +208,38 @@ export const Hero3DCanvas: React.FC = () => {
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+      const elapsed = clock.getElapsedTime();
 
       if (!prefersReducedMotion) {
-        outerMesh.rotation.y = elapsedTime * 0.09;
-        outerMesh.rotation.x = elapsedTime * 0.05;
+        // Slow isometric rotation
+        basePlate.rotation.y = elapsed * 0.04;
+        basePlateWire.rotation.y = elapsed * 0.04;
 
-        innerMesh.rotation.y = -elapsedTime * 0.14;
-        innerMesh.rotation.z = elapsedTime * 0.07;
+        midPlate.rotation.y = -elapsed * 0.07;
+        midPlateWire.rotation.y = -elapsed * 0.07;
 
-        nodePoints.rotation.y = elapsedTime * 0.09;
-        nodePoints.rotation.x = elapsedTime * 0.05;
+        coreMesh.rotation.y = elapsed * 0.18;
+        coreMesh.rotation.z = elapsed * 0.12;
+        coreWire.rotation.y = elapsed * 0.18;
+        coreWire.rotation.z = elapsed * 0.12;
 
-        ringMesh.rotation.z = elapsedTime * 0.08;
+        ringMesh.rotation.z = elapsed * 0.15;
 
-        // Floating pulse
-        masterGroup.position.y = Math.sin(elapsedTime * 0.8) * 0.3;
+        cubeGroup.rotation.y = elapsed * 0.06;
+        cubes.forEach((cube, idx) => {
+          cube.position.y = 0.2 + Math.sin(elapsed * 2 + idx) * 0.35;
+        });
 
-        // Mouse Lerp
-        currentX += (targetX - currentX) * 0.05;
-        currentY += (targetY - currentY) * 0.05;
-        masterGroup.rotation.y += currentX * 0.03;
-        masterGroup.rotation.x += currentY * 0.03;
+        nodePoints.rotation.y = -elapsed * 0.05;
+
+        // Subtle levitation
+        masterGroup.position.y = Math.sin(elapsed * 0.8) * 0.25;
+
+        // Smooth mouse lerping
+        currentX += (targetX - currentX) * 0.04;
+        currentY += (targetY - currentY) * 0.04;
+        masterGroup.rotation.y = currentX * 0.35;
+        masterGroup.rotation.x = currentY * 0.2;
       }
 
       renderer.render(scene, camera);
@@ -159,14 +256,20 @@ export const Hero3DCanvas: React.FC = () => {
         container.removeChild(renderer.domElement);
       }
 
-      geometry.dispose();
-      innerGeometry.dispose();
-      nodeGeometry.dispose();
+      basePlateGeo.dispose();
+      basePlateMat.dispose();
+      basePlateWireMat.dispose();
+      midPlateGeo.dispose();
+      midPlateMat.dispose();
+      midPlateWireMat.dispose();
+      coreGeo.dispose();
+      coreMat.dispose();
+      coreWireMat.dispose();
       ringGeo.dispose();
-      wireframeMaterial.dispose();
-      innerMaterial.dispose();
-      nodeMaterial.dispose();
       ringMat.dispose();
+      cubeGeo.dispose();
+      nodeGeo.dispose();
+      nodeMat.dispose();
       renderer.dispose();
     };
   }, []);
@@ -174,7 +277,7 @@ export const Hero3DCanvas: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center opacity-70"
+      className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center opacity-75"
       aria-hidden="true"
     />
   );

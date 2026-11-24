@@ -13,7 +13,7 @@ export const Global3DBackground: React.FC = () => {
     // Scene Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      50,
+      45,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
@@ -33,22 +33,29 @@ export const Global3DBackground: React.FC = () => {
     const worldGroup = new THREE.Group();
     scene.add(worldGroup);
 
-    // 1. Constellation Starfield
-    const particleCount = 280;
+    // Particle field with Cream White, Coral, and Luminous Teal
+    const particleCount = 260;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
-    const cBlue = new THREE.Color(0x3b82f6);
-    const cCyan = new THREE.Color(0x06b6d4);
+    const cCoral = new THREE.Color(0xff6f61);
+    const cTeal = new THREE.Color(0x2dd4bf);
+    const cCream = new THREE.Color(0xfaf7f2);
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 90;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 150;
+      positions[i * 3] = (Math.random() - 0.5) * 85;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 160;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
 
-      const mix = Math.random();
-      const col = cBlue.clone().lerp(cCyan, mix);
+      const rand = Math.random();
+      let col = cCream;
+      if (rand < 0.45) {
+        col = cCoral;
+      } else if (rand < 0.8) {
+        col = cTeal;
+      }
+
       colors[i * 3] = col.r;
       colors[i * 3 + 1] = col.g;
       colors[i * 3 + 2] = col.b;
@@ -58,21 +65,25 @@ export const Global3DBackground: React.FC = () => {
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.16,
+      size: 0.18,
       vertexColors: true,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.55,
       blending: THREE.AdditiveBlending,
     });
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     worldGroup.add(particles);
 
-    // 2. Subtle ambient lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // Subtle isometric ambient lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const cursorLight = new THREE.PointLight(0x3b82f6, 2, 40);
+    const cursorLight = new THREE.PointLight(0xff6f61, 2.2, 45);
     scene.add(cursorLight);
+
+    const secondaryLight = new THREE.PointLight(0x2dd4bf, 1.8, 45);
+    secondaryLight.position.set(-15, 20, 5);
+    scene.add(secondaryLight);
 
     // Smooth Interaction Listeners
     let mouseX = 0;
@@ -111,7 +122,6 @@ export const Global3DBackground: React.FC = () => {
       const elapsed = clock.getElapsedTime();
 
       if (!prefersReducedMotion) {
-        // Smooth lerping
         mouseX += (targetMouseX - mouseX) * 0.05;
         mouseY += (targetMouseY - mouseY) * 0.05;
         scrollY += (targetScrollY - scrollY) * 0.06;
@@ -119,15 +129,13 @@ export const Global3DBackground: React.FC = () => {
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const scrollFraction = scrollY / maxScroll;
 
-        // Camera smoothly glides down the 3D space with scroll
         camera.position.y = -scrollFraction * 50;
         camera.position.x = mouseX * 2;
-        camera.rotation.y = mouseX * 0.04;
-        camera.rotation.x = -mouseY * 0.03;
+        camera.rotation.y = mouseX * 0.03;
+        camera.rotation.x = -mouseY * 0.02;
 
         cursorLight.position.set(mouseX * 15, camera.position.y - mouseY * 10, 8);
-
-        particles.rotation.y = elapsed * 0.02;
+        particles.rotation.y = elapsed * 0.015;
       }
 
       renderer.render(scene, camera);
@@ -154,7 +162,7 @@ export const Global3DBackground: React.FC = () => {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-60"
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-70"
       aria-hidden="true"
     />
   );
