@@ -10,17 +10,17 @@ export const Global3DBackground: React.FC = () => {
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Scene Setup
+    // 1. Scene & Cinematic Fog
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04161a, 0.012);
+    scene.fog = new THREE.FogExp2(0x04161a, 0.015);
 
     const camera = new THREE.PerspectiveCamera(
-      48,
+      45,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    camera.position.set(0, 0, 32);
+    camera.position.set(0, 0, 36);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -32,8 +32,8 @@ export const Global3DBackground: React.FC = () => {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
 
-    const worldGroup = new THREE.Group();
-    scene.add(worldGroup);
+    const masterGroup = new THREE.Group();
+    scene.add(masterGroup);
 
     // Color definitions
     const COLOR_CORAL = 0xff6f61;
@@ -42,54 +42,48 @@ export const Global3DBackground: React.FC = () => {
     const COLOR_DEEP_TEAL = 0x092830;
 
     // ==========================================
-    // 1. 3D MOTION UNDULATING BACKGROUND IMAGE
+    // 2. PROCEDURAL 3D FLOWING WAVE GRID (CYBER HORIZON)
     // ==========================================
-    let imageMesh: THREE.Mesh | null = null;
-    let originalPositions: Float32Array | null = null;
-    const planeGeo = new THREE.PlaneGeometry(80, 60, 50, 50);
-    const textureLoader = new THREE.TextureLoader();
+    const gridCols = 55;
+    const gridRows = 55;
+    const waveGeo = new THREE.PlaneGeometry(100, 100, gridCols, gridRows);
+    
+    // Wireframe Mesh for flowing digital terrain
+    const waveMat = new THREE.MeshStandardMaterial({
+      color: 0x14b8a6,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18,
+      roughness: 0.3,
+      metalness: 0.8,
+    });
+    const waveMesh = new THREE.Mesh(waveGeo, waveMat);
+    waveMesh.rotation.x = -Math.PI / 2.6; // Angled futuristic horizon
+    waveMesh.position.set(0, -14, -8);
+    masterGroup.add(waveMesh);
 
-    textureLoader.load(
-      '/assets/background/isometric-bg.jpg',
-      (texture) => {
-        texture.generateMipmaps = true;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
+    // Glowing Node Points on the Wave Vertices
+    const wavePointsGeo = waveGeo.clone();
+    const wavePointsMat = new THREE.PointsMaterial({
+      color: COLOR_CORAL,
+      size: 0.18,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+    });
+    const wavePoints = new THREE.Points(wavePointsGeo, wavePointsMat);
+    wavePoints.rotation.x = -Math.PI / 2.6;
+    wavePoints.position.set(0, -14, -8);
+    masterGroup.add(wavePoints);
 
-        const planeMat = new THREE.MeshStandardMaterial({
-          map: texture,
-          roughness: 0.35,
-          metalness: 0.4,
-          transparent: true,
-          opacity: 0.48,
-          side: THREE.DoubleSide,
-          depthWrite: false,
-        });
-
-        imageMesh = new THREE.Mesh(planeGeo, planeMat);
-        // Tilt into deep isometric perspective
-        imageMesh.position.set(2, 0, -12);
-        imageMesh.rotation.set(-0.35, 0.2, -0.06);
-
-        // Store original vertex coordinates for sine-wave motion displacement
-        const posAttr = planeGeo.attributes.position;
-        originalPositions = new Float32Array(posAttr.array);
-
-        worldGroup.add(imageMesh);
-      },
-      undefined,
-      (err) => {
-        console.warn('Background texture fallback:', err);
-      }
-    );
+    const originalWavePositions = new Float32Array(waveGeo.attributes.position.array);
 
     // ==========================================
-    // 2. FLOATING 3D ISOMETRIC GEOMETRIC OBJECTS
-    // Distributed along the vertical scroll depth
+    // 3. FLOATING 3D MINIMALIST POLYHEDRAL SCULPTURES
+    // Spaced down the vertical scroll axis to frame content
     // ==========================================
-    const floatingObjects: Array<{
-      mesh: THREE.Object3D;
+    const floatingEntities: Array<{
+      group: THREE.Group;
       rotSpeedX: number;
       rotSpeedY: number;
       rotSpeedZ: number;
@@ -98,94 +92,80 @@ export const Global3DBackground: React.FC = () => {
       floatOffset: number;
     }> = [];
 
-    const geometries = [
-      new THREE.OctahedronGeometry(2.2, 0),
-      new THREE.IcosahedronGeometry(2.0, 0),
-      new THREE.TetrahedronGeometry(2.4, 0),
-      new THREE.TorusGeometry(2.8, 0.12, 16, 48),
-      new THREE.BoxGeometry(2.0, 2.0, 2.0),
+    const polyGeos = [
+      new THREE.IcosahedronGeometry(2.2, 0),
+      new THREE.OctahedronGeometry(2.4, 0),
+      new THREE.DodecahedronGeometry(2.0, 0),
+      new THREE.TorusGeometry(2.6, 0.08, 16, 48),
+      new THREE.TetrahedronGeometry(2.5, 0),
     ];
 
-    const materials = [
-      new THREE.MeshStandardMaterial({
-        color: COLOR_CORAL,
+    const entityCount = 16;
+    for (let i = 0; i < entityCount; i++) {
+      const entityGroup = new THREE.Group();
+      const geo = polyGeos[i % polyGeos.length];
+
+      // Outer wireframe cage
+      const cageMat = new THREE.MeshStandardMaterial({
+        color: i % 2 === 0 ? COLOR_CORAL : COLOR_TEAL,
         wireframe: true,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.5,
         roughness: 0.2,
         metalness: 0.8,
-      }),
-      new THREE.MeshStandardMaterial({
-        color: COLOR_TEAL,
-        wireframe: true,
+      });
+      const cageMesh = new THREE.Mesh(geo, cageMat);
+      entityGroup.add(cageMesh);
+
+      // Inner glowing core
+      const innerGeo = geo.clone();
+      const innerMat = new THREE.MeshStandardMaterial({
+        color: i % 3 === 0 ? COLOR_CREAM : COLOR_DEEP_TEAL,
+        wireframe: false,
         transparent: true,
-        opacity: 0.6,
-        roughness: 0.2,
-        metalness: 0.8,
-      }),
-      new THREE.MeshStandardMaterial({
-        color: COLOR_CREAM,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.45,
-        roughness: 0.1,
-      }),
-      new THREE.MeshStandardMaterial({
-        color: COLOR_DEEP_TEAL,
-        transparent: true,
-        opacity: 0.7,
+        opacity: 0.35,
         roughness: 0.4,
-        metalness: 0.6,
-      }),
-    ];
+        metalness: 0.7,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      innerMesh.scale.setScalar(0.65);
+      entityGroup.add(innerMesh);
 
-    // Distribute 18 floating 3D objects down the scroll axis
-    const objectCount = 18;
-    for (let i = 0; i < objectCount; i++) {
-      const geo = geometries[i % geometries.length];
-      const mat = materials[i % materials.length];
-      const mesh = new THREE.Mesh(geo, mat);
+      // Orbiting micro-ring
+      const microRingGeo = new THREE.TorusGeometry(3.2, 0.04, 12, 36);
+      const microRingMat = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? COLOR_TEAL : COLOR_CORAL,
+        transparent: true,
+        opacity: 0.4,
+      });
+      const microRing = new THREE.Mesh(microRingGeo, microRingMat);
+      microRing.rotation.x = Math.PI / 3;
+      entityGroup.add(microRing);
 
-      // Add a glowing inner wireframe / node point to make each object look high-tech
-      if (i % 2 === 0) {
-        const wireGeo = geo.clone();
-        const wireMat = new THREE.MeshBasicMaterial({
-          color: i % 4 === 0 ? COLOR_CORAL : COLOR_TEAL,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.8,
-        });
-        const innerMesh = new THREE.Mesh(wireGeo, wireMat);
-        innerMesh.scale.setScalar(0.75);
-        mesh.add(innerMesh);
-      }
-
-      // Spread along X, Y (down the full height), and Z depth
+      // Position along the flanks (left & right margins) and vertically down the page
       const side = i % 2 === 0 ? 1 : -1;
-      const x = side * (14 + Math.random() * 12);
-      const y = 10 - i * 8.5; // spans down to ~ -145 for deep page scroll
-      const z = -6 + (Math.random() - 0.5) * 16;
+      const x = side * (16 + Math.random() * 10);
+      const y = 12 - i * 9.5; // Spans deep down the entire scroll length
+      const z = -4 + (Math.random() - 0.5) * 14;
 
-      mesh.position.set(x, y, z);
-      mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+      entityGroup.position.set(x, y, z);
+      masterGroup.add(entityGroup);
 
-      worldGroup.add(mesh);
-
-      floatingObjects.push({
-        mesh,
-        rotSpeedX: (Math.random() - 0.5) * 0.015,
-        rotSpeedY: (Math.random() - 0.5) * 0.02,
-        rotSpeedZ: (Math.random() - 0.5) * 0.01,
+      floatingEntities.push({
+        group: entityGroup,
+        rotSpeedX: (Math.random() - 0.5) * 0.012,
+        rotSpeedY: (Math.random() - 0.5) * 0.018,
+        rotSpeedZ: (Math.random() - 0.5) * 0.008,
         initialY: y,
-        floatSpeed: 0.8 + Math.random() * 0.8,
+        floatSpeed: 0.7 + Math.random() * 0.7,
         floatOffset: Math.random() * Math.PI * 2,
       });
     }
 
     // ==========================================
-    // 3. 3D PARTICLE FIELD WITH DEPTH
+    // 4. PARTICLES & DIGITAL STARDUST
     // ==========================================
-    const particleCount = 380;
+    const particleCount = 340;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -195,9 +175,9 @@ export const Global3DBackground: React.FC = () => {
     const cCream = new THREE.Color(COLOR_CREAM);
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 110;
-      positions[i * 3 + 1] = 20 - Math.random() * 180; // covers full scroll range
-      positions[i * 3 + 2] = -25 + Math.random() * 50;
+      positions[i * 3] = (Math.random() - 0.5) * 115;
+      positions[i * 3 + 1] = 25 - Math.random() * 185;
+      positions[i * 3 + 2] = -20 + Math.random() * 45;
 
       const rand = Math.random();
       let col = cCream;
@@ -219,28 +199,27 @@ export const Global3DBackground: React.FC = () => {
       opacity: 0.65,
       blending: THREE.AdditiveBlending,
     });
-    const particleSystem = new THREE.Points(particleGeo, particleMat);
-    worldGroup.add(particleSystem);
+    const particleCloud = new THREE.Points(particleGeo, particleMat);
+    masterGroup.add(particleCloud);
 
     // ==========================================
-    // 4. DYNAMIC LIGHTING THAT TRACKS SCENE
+    // 5. CINEMATIC LIGHTING
     // ==========================================
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
 
-    const cursorCoralLight = new THREE.PointLight(COLOR_CORAL, 3.5, 60);
-    scene.add(cursorCoralLight);
+    const cursorLight = new THREE.PointLight(COLOR_CORAL, 3.8, 65);
+    scene.add(cursorLight);
 
-    const rovingTealLight = new THREE.PointLight(COLOR_TEAL, 3.0, 70);
-    scene.add(rovingTealLight);
+    const orbitalLight = new THREE.PointLight(COLOR_TEAL, 3.2, 70);
+    scene.add(orbitalLight);
 
-    // Directional light for isometric specular shine
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(15, 20, 25);
-    scene.add(dirLight);
+    const keyDirectional = new THREE.DirectionalLight(COLOR_CREAM, 0.7);
+    keyDirectional.position.set(10, 20, 20);
+    scene.add(keyDirectional);
 
     // ==========================================
-    // 5. MOUSE & SCROLL TRACKING
+    // 6. MOUSE & SCROLL LERP ENGINE
     // ==========================================
     let mouseX = 0;
     let mouseY = 0;
@@ -270,7 +249,7 @@ export const Global3DBackground: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     // ==========================================
-    // 6. CONTINUOUS 3D MOTION ANIMATION LOOP
+    // 7. ANIMATION TICK (60FPS)
     // ==========================================
     let animId: number;
     const clock = new THREE.Clock();
@@ -280,7 +259,7 @@ export const Global3DBackground: React.FC = () => {
       const elapsed = clock.getElapsedTime();
 
       if (!prefersReducedMotion) {
-        // Smooth lerping for mouse & scroll
+        // Smooth lerping
         mouseX += (targetMouseX - mouseX) * 0.05;
         mouseY += (targetMouseY - mouseY) * 0.05;
         scrollY += (targetScrollY - scrollY) * 0.06;
@@ -289,62 +268,64 @@ export const Global3DBackground: React.FC = () => {
         const scrollFraction = scrollY / maxScroll;
 
         // Camera smoothly glides down the 3D space with page scroll
-        camera.position.y = -scrollFraction * 135;
-        camera.position.x = mouseX * 2.8;
-        camera.rotation.y = mouseX * 0.05;
-        camera.rotation.x = -mouseY * 0.035;
+        camera.position.y = -scrollFraction * 140;
+        camera.position.x = mouseX * 2.5;
+        camera.rotation.y = mouseX * 0.04;
+        camera.rotation.x = -mouseY * 0.03;
 
-        // 1. Undulating 3D wave motion on the background image mesh
-        if (imageMesh && originalPositions) {
-          const posAttr = planeGeo.attributes.position;
-          const posArray = posAttr.array as Float32Array;
+        // 1. Procedural 3D Wave Motion
+        const wavePos = waveGeo.attributes.position;
+        const wavePointsPos = wavePointsGeo.attributes.position;
+        const posArray = wavePos.array as Float32Array;
+        const pointsArray = wavePointsPos.array as Float32Array;
 
-          for (let i = 0; i < posArray.length; i += 3) {
-            const ox = originalPositions[i];
-            const oy = originalPositions[i + 1];
+        for (let i = 0; i < posArray.length; i += 3) {
+          const ox = originalWavePositions[i];
+          const oy = originalWavePositions[i + 1];
 
-            // Harmonic 3D wave equation
-            posArray[i + 2] =
-              Math.sin(ox * 0.12 + elapsed * 1.4) * 1.8 +
-              Math.cos(oy * 0.12 + elapsed * 1.1) * 1.4 +
-              Math.sin((ox + oy) * 0.08 + elapsed * 0.7) * 1.0;
-          }
-          posAttr.needsUpdate = true;
+          // Dual-frequency mathematical fluid displacement
+          const z =
+            Math.sin(ox * 0.12 + elapsed * 1.3) * 2.2 +
+            Math.cos(oy * 0.14 + elapsed * 1.0) * 1.8 +
+            Math.sin((ox + oy) * 0.08 + elapsed * 0.7) * 1.2;
 
-          // Parallax tracking with scroll & cursor
-          imageMesh.position.y = camera.position.y + 2;
-          imageMesh.rotation.y = 0.2 + mouseX * 0.08;
-          imageMesh.rotation.x = -0.35 + mouseY * 0.06;
+          posArray[i + 2] = z;
+          pointsArray[i + 2] = z;
+        }
+        wavePos.needsUpdate = true;
+        wavePointsPos.needsUpdate = true;
+
+        // Follow camera down with subtle offset
+        waveMesh.position.y = camera.position.y - 14;
+        wavePoints.position.y = camera.position.y - 14;
+
+        // 2. Rotate & bob 3D Floating Sculptures
+        for (let i = 0; i < floatingEntities.length; i++) {
+          const entity = floatingEntities[i];
+          entity.group.rotation.x += entity.rotSpeedX;
+          entity.group.rotation.y += entity.rotSpeedY;
+          entity.group.rotation.z += entity.rotSpeedZ;
+
+          entity.group.position.y =
+            entity.initialY +
+            Math.sin(elapsed * entity.floatSpeed + entity.floatOffset) * 0.85;
         }
 
-        // 2. Rotate & bob all floating 3D objects
-        for (let i = 0; i < floatingObjects.length; i++) {
-          const item = floatingObjects[i];
-          item.mesh.rotation.x += item.rotSpeedX;
-          item.mesh.rotation.y += item.rotSpeedY;
-          item.mesh.rotation.z += item.rotSpeedZ;
-
-          // Smooth floating levitation
-          item.mesh.position.y =
-            item.initialY +
-            Math.sin(elapsed * item.floatSpeed + item.floatOffset) * 0.9;
-        }
-
-        // 3. Move dynamic 3D light sources
-        cursorCoralLight.position.set(
-          mouseX * 18,
-          camera.position.y - mouseY * 12 + 2,
+        // 3. Move Interactive 3D Lights
+        cursorLight.position.set(
+          mouseX * 16,
+          camera.position.y - mouseY * 10 + 2,
           10
         );
 
-        rovingTealLight.position.set(
-          Math.sin(elapsed * 0.6) * 22,
-          camera.position.y + Math.cos(elapsed * 0.8) * 18,
-          6
+        orbitalLight.position.set(
+          Math.sin(elapsed * 0.5) * 20,
+          camera.position.y + Math.cos(elapsed * 0.7) * 15,
+          8
         );
 
-        // 4. Subtle rotation on the particle web
-        particleSystem.rotation.y = elapsed * 0.015;
+        // 4. Subtle drift of particle constellation
+        particleCloud.rotation.y = elapsed * 0.012;
       }
 
       renderer.render(scene, camera);
@@ -362,9 +343,11 @@ export const Global3DBackground: React.FC = () => {
         container.removeChild(renderer.domElement);
       }
 
-      planeGeo.dispose();
-      geometries.forEach((g) => g.dispose());
-      materials.forEach((m) => m.dispose());
+      waveGeo.dispose();
+      waveMat.dispose();
+      wavePointsGeo.dispose();
+      wavePointsMat.dispose();
+      polyGeos.forEach((g) => g.dispose());
       particleGeo.dispose();
       particleMat.dispose();
       renderer.dispose();
