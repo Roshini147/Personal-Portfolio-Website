@@ -10,7 +10,7 @@ interface Tilt3DCardProps {
 export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
   children,
   className = '',
-  maxTilt = 7,
+  maxTilt = 8,
   glare = true,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -38,14 +38,14 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
     const rotateY = ((mouseX / width) - 0.5) * maxTilt;
 
     setTransformStyle(
-      `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(10px)`
+      `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(16px)`
     );
 
     if (glare) {
       setGlarePosition({
         x: (mouseX / width) * 100,
         y: (mouseY / height) * 100,
-        opacity: 0.18,
+        opacity: 0.22,
       });
     }
   };
@@ -64,7 +64,7 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
       onMouseLeave={handleMouseLeave}
       style={{
         transform: transformStyle,
-        transition: 'transform 0.18s cubic-bezier(0.2, 0.8, 0.4, 1)',
+        transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
         transformStyle: 'preserve-3d',
       }}
       className={`relative will-change-transform ${className}`}
@@ -77,7 +77,7 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
           className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 overflow-hidden"
           style={{
             opacity: glarePosition.opacity,
-            background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(250, 247, 242, 0.22) 0%, rgba(255, 111, 97, 0.1) 40%, transparent 75%)`,
+            background: `radial-gradient(circle at ${glarePosition.x}% ${glarePosition.y}%, rgba(250, 247, 242, 0.24) 0%, rgba(255, 111, 97, 0.12) 40%, transparent 75%)`,
           }}
         />
       )}
